@@ -4,6 +4,8 @@ import "dotenv/config";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 
+import authRoute from "./routes/auth";
+
 const app = express();
 
 mongoose
@@ -24,6 +26,8 @@ app.use(cors());
 // routes
 app.get("/health", (req: Request, res: Response) => {
   res.json({
-    status: "ok",
+    health: "ok",
   });
 });
+
+app.use("/api/v1/auth", authRoute);
