@@ -12,8 +12,13 @@ const dietChartSchema = new mongoose.Schema(
     morningMeal: { type: String },
     eveningMeal: { type: String },
     nightMeal: { type: String },
-    ingredients: [{ ingredient: String, quantity: String }],
-    instructions: { type: String },
+    ingredients: [
+      {
+        ingredient: { type: String, required: true },
+        quantity: { type: String, required: true },
+      },
+    ],
+    instructions: [{ type: String }],
   },
   { timestamps: true }
 );
