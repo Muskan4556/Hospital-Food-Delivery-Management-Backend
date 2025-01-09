@@ -97,7 +97,7 @@ export const getValidatedUser = async (
   res: Response
 ): Promise<any> => {
   try {
-    return res.status(200).send({ userId: req.userId });
+    return res.status(200).send({ userId: req.userId, userRole: req.role });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal Server Error" });

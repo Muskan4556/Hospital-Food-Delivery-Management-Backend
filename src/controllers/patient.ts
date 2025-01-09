@@ -7,6 +7,7 @@ export const createPatient = async (
 ): Promise<any> => {
   try {
     const { name, dob, contactInfo, ...patientData } = req.body;
+    console.log(name, dob, contactInfo, patientData);
 
     const existingPatient = await Patient.findOne({
       name: name,
@@ -20,12 +21,10 @@ export const createPatient = async (
       });
     }
 
-    const newPatient = new Patient(patientData);
+    const newPatient = new Patient(req.body);
     await newPatient.save();
 
-    res
-      .status(201)
-      .json({ message: "Patient created successfully", patient: newPatient });
+    res.status(201).json({ message: "Patient created successfully" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
@@ -63,7 +62,7 @@ export const getPatientById = async (
       return res.status(404).json({ message: "Patient not found" });
     }
 
-    res.status(200).json(patient);
+    res.status(200).json({ patient });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
@@ -81,17 +80,24 @@ export const updatePatient = async (
       return res.status(400).json({ message: "Patient ID is required" });
     }
 
-    const updatedPatient = await Patient.findByIdAndUpdate(req.body, {
-      new: true,
-    });
+    const { name, dob, ...updateFields } = req.body;
+
+    const updatedPatient = await Patient.findByIdAndUpdate(
+      patientId,
+      updateFields,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!updatedPatient) {
       return res.status(404).json({ message: "Patient not found" });
     }
 
     res.status(200).json({
-      message: "Patient updated successfully",
-      patient: updatedPatient,
+      message: "Patient data updated successfully",
+      updatedPatient,
     });
   } catch (err) {
     console.log(err);

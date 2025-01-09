@@ -1,6 +1,5 @@
 import express from "express";
 import { verifyToken } from "../middlewares/auth";
-import { getValidatedUser } from "../controllers/auth";
 import { authorize } from "../middlewares/authorize";
 import {
   getAllPatients,
@@ -9,41 +8,23 @@ import {
   getPatientById,
   updatePatient,
 } from "../controllers/patient";
+import { validatePatient } from "../middlewares/validator";
 
 const router = express.Router();
 
 router.post(
   "/",
+  validatePatient,
   verifyToken,
-  getValidatedUser,
   authorize("Hospital Manager"),
   createPatient
 );
-router.get(
-  "/",
-  verifyToken,
-  getValidatedUser,
-  authorize("Hospital Manager"),
-  getAllPatients
-);
-router.get(
-  "/:id",
-  verifyToken,
-  getValidatedUser,
-  authorize("Hospital Manager"),
-  getPatientById
-);
-router.put(
-  "/:id",
-  verifyToken,
-  getValidatedUser,
-  authorize("Hospital Manager"),
-  updatePatient
-);
+router.get("/", verifyToken, authorize("Hospital Manager"), getAllPatients);
+router.get("/:id", verifyToken, authorize("Hospital Manager"), getPatientById);
+router.put("/:id", verifyToken, authorize("Hospital Manager"), updatePatient);
 router.delete(
   "/:id",
   verifyToken,
-  getValidatedUser,
   authorize("Hospital Manager"),
   deletePatient
 );
