@@ -2,7 +2,7 @@ import mongoose, { InferSchemaType } from "mongoose";
 
 // Info - store information about delivery staff who are responsible for delivering meals to patient rooms.
 
-const deliveryStaff = new mongoose.Schema(
+const deliveryPersonnelSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     contactInfo: {
@@ -13,8 +13,8 @@ const deliveryStaff = new mongoose.Schema(
   { timestamps: true }
 );
 
-export type TDeliveryStaff = Omit<
-  InferSchemaType<typeof deliveryStaff>,
+export type TDeliveryPersonnel = Omit<
+  InferSchemaType<typeof deliveryPersonnelSchema>,
   "_id" | "createdAt" | "updatedAt"
 > & {
   _id?: string;
@@ -22,6 +22,9 @@ export type TDeliveryStaff = Omit<
   updatedAt?: Date;
 };
 
-const DeliveryStaff = mongoose.model("DeliveryStaff", deliveryStaff);
+const DeliveryPersonnel = mongoose.model(
+  "DeliveryPersonnel",
+  deliveryPersonnelSchema
+);
 
-export default DeliveryStaff;
+export default DeliveryPersonnel;

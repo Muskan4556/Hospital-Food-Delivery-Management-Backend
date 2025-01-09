@@ -4,9 +4,9 @@ import mongoose, { InferSchemaType } from "mongoose";
 
 const deliveryStatusSchema = new mongoose.Schema(
   {
-    deliveryStaffId: {
+    deliveryPersonnelId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "DeliveryStaff",
+      ref: "deliveryPersonnel",
       required: true,
     },
     mealPreparationId: {

@@ -36,6 +36,6 @@ export type TPatient = Omit<
   updatedAt?: Date;
 };
 
-const Paitent = mongoose.model("Paitent", patientSchema);
+const Patient = mongoose.model("Paitent", patientSchema);
 
-export default Paitent;
+export default Patient;
