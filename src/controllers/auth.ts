@@ -45,7 +45,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -72,7 +72,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     res.cookie("auth_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 24 * 60 * 60 * 1000, 
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({
@@ -100,6 +100,6 @@ export const getValidatedUser = async (
     return res.status(200).send({ userId: req.userId });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };

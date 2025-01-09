@@ -5,6 +5,12 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 
 import authRoute from "./routes/auth";
+import patientRoute from "./routes/patient";
+import dietChartRoute from "./routes/dietChart";
+import mealPreparationRoute from "./routes/mealPreparation";
+import mealDeliveryStatusRoute from "./routes/deliveryStatus";
+import pantryStaffRoute from "./routes/pantryStaff";
+import deliveryPersonnelRoute from "./routes/deliveryPersonnel";
 
 const app = express();
 
@@ -31,3 +37,9 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/patient", patientRoute);
+app.use("/api/v1//diet-charts", dietChartRoute);
+app.use("/api/v1/meal-preparation", mealPreparationRoute);
+app.use("/api/v1/meal-delivery-status", mealDeliveryStatusRoute);
+app.use("/api/v1/pantry-staff", pantryStaffRoute);
+app.use("/api/v1/delivery-personnel", deliveryPersonnelRoute);

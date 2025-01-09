@@ -1,10 +1,11 @@
 import mongoose, { InferSchemaType } from "mongoose";
 
-// Info - store patient details, including medical and personal information. 
+// Info - store patient details, including medical and personal information.
 
 const patientSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
+    dob: { type: Date, required: true },
     diseases: { type: [String], default: [] },
     allergies: { type: [String], default: [] },
     roomNumber: { type: String, required: true },
@@ -14,7 +15,7 @@ const patientSchema = new mongoose.Schema(
     gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
     contactInfo: {
       phone: { type: String, required: true },
-      email: { type: String, required: true },
+      email: { type: String },
     },
     emergencyContact: [
       {
