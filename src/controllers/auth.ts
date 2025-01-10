@@ -91,7 +91,6 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
 export const logout = async (req: Request, res: Response): Promise<any> => {
   res.cookie("auth_token", "", { expires: new Date(0) });
-  sameSite: "none",
   res.status(200).json("Logout successfully");
 };
 
