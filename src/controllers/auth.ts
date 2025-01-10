@@ -37,6 +37,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     res.cookie("auth_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000, // 1
     });
 
@@ -71,6 +72,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
     res.cookie("auth_token", token, {
       httpOnly: true,
+      sameSite: "none",
       secure: process.env.NODE_ENV === "production",
       maxAge: 24 * 60 * 60 * 1000,
     });
@@ -89,6 +91,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
 export const logout = async (req: Request, res: Response): Promise<any> => {
   res.cookie("auth_token", "", { expires: new Date(0) });
+  sameSite: "none",
   res.status(200).json("Logout successfully");
 };
 

@@ -121,7 +121,7 @@ export const validatePatient = [
     .withMessage("Phone number must be valid"),
 
   body("contactInfo.email")
-    .optional()
+    .optional({ checkFalsy: true })
     .isString()
     .withMessage("Email must be a string")
     .isEmail()
