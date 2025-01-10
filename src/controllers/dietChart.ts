@@ -16,7 +16,14 @@ export const createDietChart = async (
         .json({ message: "Diet chart already exists for this patient." });
     }
 
-    const dietChart = new DietChart({ patientId, dietData });
+    const dietChart = new DietChart({
+      patientId,
+      morningMeal: dietData.morningMeal,
+      eveningMeal: dietData.eveningMeal,
+      nightMeal: dietData.nightMeal,
+      ingredients: dietData.ingredients,
+      instructions: dietData.instructions,
+    });
 
     await dietChart.save();
     res.status(201).json({
@@ -29,18 +36,12 @@ export const createDietChart = async (
   }
 };
 
-export const getDietChartByPatientId = async (
+export const getAllDietChart = async (
   req: Request,
   res: Response
 ): Promise<any> => {
   try {
-    const patientId = req.params.id;
-
-    if (!patientId) {
-      return res.status(400).json({ message: "Patient ID is required" });
-    }
-
-    const dietChart = await DietChart.findOne({ patientId }).populate(
+    const dietChart = await DietChart.find({}).populate(
       "patientId",
       "name gender age diseases allergies"
     );
@@ -63,28 +64,24 @@ export const updateDietChart = async (
   res: Response
 ): Promise<any> => {
   try {
-    const patientId = req.params.id;
+    const dietId = req.params.id;
 
-    if (!patientId) {
-      return res.status(400).json({ message: "Patient ID is required." });
+    if (!dietId) {
+      return res.status(404).json({ message: "Diet chart not found." });
     }
 
-    const updatedDietChart = await DietChart.findOneAndUpdate(req.body, {
-      new: true,
-    });
-
-    if (!updatedDietChart) {
-      return res
-        .status(404)
-        .json({ message: "Diet chart not found for this patient." });
-    }
+    const updatedDietChart = await DietChart.findOneAndUpdate(
+      { _id: dietId },
+      req.body,
+      { new: true }
+    );
 
     res.status(200).json({
       message: "Diet chart updated successfully",
       dietChart: updatedDietChart,
     });
   } catch (err) {
-    console.log(err);
+    console.error("Error updating diet chart:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -94,14 +91,14 @@ export const deleteDietChart = async (
   res: Response
 ): Promise<any> => {
   try {
-    const patientId = req.params.id;
+    const dietId = req.params.id;
 
-    if (!patientId) {
+    if (!dietId) {
       return res.status(400).json({ message: "Patient ID is required." });
     }
 
     const deletedDietChart = await DietChart.findOneAndDelete({
-      patient: patientId,
+      _id: dietId,
     });
 
     if (!deletedDietChart) {

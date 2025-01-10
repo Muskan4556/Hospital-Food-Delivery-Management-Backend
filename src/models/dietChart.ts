@@ -9,9 +9,9 @@ const dietChartSchema = new mongoose.Schema(
       ref: "Patient",
       required: true,
     },
-    morningMeal: { type: String },
-    eveningMeal: { type: String },
-    nightMeal: { type: String },
+    morningMeal: { type: String, required: true },
+    eveningMeal: { type: String, required: true },
+    nightMeal: { type: String, required: true },
     ingredients: [
       {
         ingredient: { type: String, required: true },

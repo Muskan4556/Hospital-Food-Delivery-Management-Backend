@@ -43,7 +43,7 @@ app.get("/health", (req: Request, res: Response) => {
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/patient", patientRoute);
-app.use("/api/v1//diet-charts", dietChartRoute);
+app.use("/api/v1/diet-charts", dietChartRoute);
 app.use("/api/v1/meal-preparation", mealPreparationRoute);
 app.use("/api/v1/meal-delivery-status", mealDeliveryStatusRoute);
 app.use("/api/v1/pantry-staff", pantryStaffRoute);
