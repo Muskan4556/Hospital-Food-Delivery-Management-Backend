@@ -6,7 +6,7 @@ const pantryStaffSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     contactInfo: {
-      phone: { type: String },
+      phone: { type: String, requied: true },
       email: { type: String },
     },
     location: { type: String, required: true },

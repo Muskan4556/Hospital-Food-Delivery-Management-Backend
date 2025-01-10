@@ -13,6 +13,8 @@ const router = express.Router();
 
 router.post("/", verifyToken, authorize("Hospital Manager"), createPantryStaff);
 
+router.get("/", verifyToken, authorize("Hospital Manager", "Inner Pantry Staff"), getAllPantryStaff);
+
 router.put(
   "/:id",
   verifyToken,
