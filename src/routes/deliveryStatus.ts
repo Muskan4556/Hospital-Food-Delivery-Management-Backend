@@ -3,31 +3,39 @@ import { verifyToken } from "../middlewares/auth";
 import { authorize } from "../middlewares/authorize";
 import {
   assignMealToDeliveryPersonnel,
-  trackMealDelivery,
+  deleteDelivery,
+  getAllDeliveryInfo,
   updateDeliveryStatus,
 } from "../controllers/deliveryStatus";
 
 const router = express.Router();
 
 router.post(
-  "/assign",
+  "/",
   verifyToken,
-  authorize("Inner Pantry Staff"),
+  authorize("Inner Pantry Staff", "Admin"),
   assignMealToDeliveryPersonnel
 );
 
-router.post(
-  "/track",
+router.get(
+  "/",
   verifyToken,
-  authorize("Hospital Manager"),
-  trackMealDelivery
+  authorize("Hospital Manager", "Admin"),
+  getAllDeliveryInfo
 );
 
 router.put(
-  "/status/:id",
+  "/:id",
   verifyToken,
-  authorize("Hospital Manager, Delivery Personnel"),
+  authorize("Hospital Manager, Delivery Personnel", "Admin"),
   updateDeliveryStatus
+);
+
+router.delete(
+  "/:id",
+  verifyToken,
+  authorize("Hospital Manager", "Admin"),
+  deleteDelivery
 );
 
 export default router;

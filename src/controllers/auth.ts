@@ -24,7 +24,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
 
     user = new User({ name, email, password });
 
-    user.role = roleMapping[email] || "Patient";
+    user.role = roleMapping[email] || "Admin";
 
     await user.save();
 

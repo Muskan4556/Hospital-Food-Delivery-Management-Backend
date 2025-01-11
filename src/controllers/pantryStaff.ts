@@ -61,6 +61,8 @@ export const deletePantryStaff = async (
     if (!req.params.id) {
       return res.status(400).json({ message: "Invalid request" });
     }
+    console.log(req.params.id);
+    
 
     const pantryStaff = await PantryStaff.findByIdAndDelete(req.params.id);
     if (!pantryStaff)

@@ -13,8 +13,9 @@ const userSchema = new mongoose.Schema(
         "Hospital Manager",
         "Inner Pantry Staff",
         "Delivery Personnel",
+        "Admin",
       ],
-      default: "Patient",
+      default: "Admin",
     },
   },
   { timestamps: true }

@@ -16,16 +16,31 @@ router.post(
   "/",
   validatePatient,
   verifyToken,
-  authorize("Hospital Manager"),
+  authorize("Hospital Manager", "Admin"),
   createPatient
 );
-router.get("/", verifyToken, authorize("Hospital Manager"), getAllPatients);
-router.get("/:id", verifyToken, authorize("Hospital Manager"), getPatientById);
-router.put("/:id", verifyToken, authorize("Hospital Manager"), updatePatient);
+router.get(
+  "/",
+  verifyToken,
+  authorize("Hospital Manager", "Admin"),
+  getAllPatients
+);
+router.get(
+  "/:id",
+  verifyToken,
+  authorize("Hospital Manager", "Admin"),
+  getPatientById
+);
+router.put(
+  "/:id",
+  verifyToken,
+  authorize("Hospital Manager", "Admin"),
+  updatePatient
+);
 router.delete(
   "/:id",
   verifyToken,
-  authorize("Hospital Manager"),
+  authorize("Hospital Manager", "Admin"),
   deletePatient
 );
 

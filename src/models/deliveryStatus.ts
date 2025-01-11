@@ -6,7 +6,7 @@ const deliveryStatusSchema = new mongoose.Schema(
   {
     deliveryPersonnelId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "deliveryPersonnel",
+      ref: "DeliveryPersonnel",
       required: true,
     },
     mealPreparationId: {
@@ -14,13 +14,18 @@ const deliveryStatusSchema = new mongoose.Schema(
       ref: "MealPreparation",
       required: true,
     },
-    deliveryStatus: {
+    patientId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Patient",
+      required: true,
+    },
+    status: {
       type: String,
       enum: ["Pending", "Delivered"],
       default: "Pending",
     },
-    deliveryTime: { type: Date },
-    deliveryNotes: { type: String },
+    deliveryTime: { type: Date, required: true },
+    deliveryNotes: { type: String, default: "Default Note" },
   },
   { timestamps: true }
 );

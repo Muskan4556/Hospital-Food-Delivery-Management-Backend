@@ -8,7 +8,9 @@ export const createDeliveryPersonnel = async (
   try {
     const deliveryPersonnel = new DeliveryPersonnel(req.body);
     await deliveryPersonnel.save();
-    return res.status(201).json(deliveryPersonnel);
+    return res.status(201).json({
+      message: "Delivery Personnel created successfully",
+    });
   } catch (err) {
     return res.status(500).json({
       message: "Internal Server Error",

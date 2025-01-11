@@ -41,10 +41,9 @@ export const getAllDietChart = async (
   res: Response
 ): Promise<any> => {
   try {
-    const dietChart = await DietChart.find({}).populate(
-      "patientId",
-      "name gender age diseases allergies"
-    );
+    const dietChart = await DietChart.find({})
+      .populate("patientId", "name gender age diseases allergies")
+      .lean();
 
     if (!dietChart) {
       return res

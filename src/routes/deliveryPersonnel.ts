@@ -11,30 +11,30 @@ import {
 const router = express.Router();
 
 router.post(
-  "/delivery-personnel",
+  "/",
   verifyToken,
-  authorize("Inner Pantry Staff"),
+  authorize("Inner Pantry Staff", "Admin"),
   createDeliveryPersonnel
 );
 
 router.get(
   "/",
   verifyToken,
-  authorize("Inner Pantry Staff"),
+  authorize("Inner Pantry Staff", "Admin"),
   getAllDeliveryPersonnel
 );
 
 router.put(
   "/:id",
   verifyToken,
-  authorize("Inner Pantry Staff"),
+  authorize("Inner Pantry Staff", "Admin"),
   updateDeliveryPersonnel
 );
 
 router.delete(
   "/:id",
   verifyToken,
-  authorize("Inner Pantry Staff"),
+  authorize("Inner Pantry Staff", "Admin"),
   deleteDeliveryPersonnel
 );
 

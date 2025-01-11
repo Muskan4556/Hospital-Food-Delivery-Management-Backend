@@ -10,19 +10,29 @@ import {
 
 const router = express.Router();
 
-router.post("/", verifyToken, authorize("Hospital Manager"), createDietChart);
+router.post(
+  "/",
+  verifyToken,
+  authorize("Hospital Manager", "Admin"),
+  createDietChart
+);
 router.get(
   "/",
   verifyToken,
-  authorize("Hospital Manager", "Inner Pantry Staff"),
+  authorize("Hospital Manager", "Inner Pantry Staff", "Admin"),
   getAllDietChart
 );
-router.put("/:id", verifyToken, authorize("Hospital Manager"), updateDietChart);
+router.put(
+  "/:id",
+  verifyToken,
+  authorize("Hospital Manager", "Admin"),
+  updateDietChart
+);
 
 router.delete(
   "/:id",
   verifyToken,
-  authorize("Hospital Manager"),
+  authorize("Hospital Manager", "Admin"),
   deleteDietChart
 );
 

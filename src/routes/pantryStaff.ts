@@ -11,21 +11,26 @@ import {
 
 const router = express.Router();
 
-router.post("/", verifyToken, authorize("Hospital Manager"), createPantryStaff);
+router.post("/", verifyToken, authorize("Hospital Manager", "Admin"), createPantryStaff);
 
-router.get("/", verifyToken, authorize("Hospital Manager", "Inner Pantry Staff"), getAllPantryStaff);
+router.get(
+  "/",
+  verifyToken,
+  authorize("Hospital Manager", "Inner Pantry Staff", "Admin"),
+  getAllPantryStaff
+);
 
 router.put(
   "/:id",
   verifyToken,
-  authorize("Hospital Manager", "Inner Pantry Staff"),
+  authorize("Hospital Manager", "Inner Pantry Staff", "Admin"),
   updatePantryStaff
 );
 
 router.delete(
-  "/pantry-staff/:id",
+  "/:id",
   verifyToken,
-  authorize("Hospital Manager"),
+  authorize("Hospital Manager", "Admin"),
   deletePantryStaff
 );
 

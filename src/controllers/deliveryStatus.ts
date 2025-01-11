@@ -2,21 +2,25 @@ import { Request, Response } from "express";
 import DeliveryStatus from "../models/deliveryStatus";
 import DeliveryPersonnel from "../models/deliveryPersonnel";
 import MealPreparation from "../models/mealPreparation";
+import Patient from "../models/patient";
 
 export const assignMealToDeliveryPersonnel = async (
   req: Request,
   res: Response
 ): Promise<any> => {
   try {
-    const { mealPreparationId, deliveryPersonnelId } = req.body;
+    const { mealPreparationId, deliveryPersonnelId, patientId, deliveryTime } =
+      req.body;
 
-    // Check if the meal preparation exists
+    if (!deliveryTime) {
+      return res.status(400).json({ message: "Delivery time is required" });
+    }
+
     const mealPreparation = await MealPreparation.findById(mealPreparationId);
     if (!mealPreparation) {
       return res.status(404).json({ message: "Meal Preparation not found" });
     }
 
-    // Check if the delivery personnel exists
     const deliveryPersonnel = await DeliveryPersonnel.findById(
       deliveryPersonnelId
     );
@@ -24,14 +28,18 @@ export const assignMealToDeliveryPersonnel = async (
       return res.status(404).json({ message: "Delivery Personnel not found" });
     }
 
-    // Create a new DeliveryStatus entry
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+
     const deliveryStatus = new DeliveryStatus({
       mealPreparationId,
       deliveryPersonnelId,
+      patientId,
       deliveryStatus: "Pending",
+      deliveryTime,
     });
-
-    // Save DeliveryStatus
     await deliveryStatus.save();
 
     res.status(201).json({
@@ -46,26 +54,28 @@ export const assignMealToDeliveryPersonnel = async (
   }
 };
 
-export const trackMealDelivery = async (
+export const updateDeliveryStatus = async (
   req: Request,
   res: Response
 ): Promise<any> => {
   try {
-    const { mealPreparationId } = req.body;
+    const deliveryId = req.params.id;
+    if (!deliveryId) {
+      return res.status(404).json({ message: "Delivery ID not found" });
+    }
+    const { status } = req.body;
 
-    // Find the delivery status for the given meal preparation
-    const deliveryStatus = await DeliveryStatus.findOne({
-      mealPreparationId,
-    }).populate("deliveryPersonnelId mealPreparationId");
-    if (!deliveryStatus) {
-      return res
-        .status(404)
-        .json({ message: "Delivery Status not found for this meal" });
+    const updatedDeliveryInfo = await DeliveryStatus.findByIdAndUpdate(
+      deliveryId,
+      { status: status },
+      { new: true }
+    );
+    if (!updatedDeliveryInfo) {
+      return res.status(404).json({ message: "Delivery Info not found" });
     }
 
-    return res.status(200).json({
-      message: "Meal delivery status retrieved successfully",
-      deliveryStatus,
+    res.status(200).json({
+      message: "Status updated successfully",
     });
   } catch (err) {
     console.log(err);
@@ -73,44 +83,51 @@ export const trackMealDelivery = async (
   }
 };
 
-export const updateDeliveryStatus = async (
+export const getAllDeliveryInfo = async (
   req: Request,
   res: Response
 ): Promise<any> => {
   try {
-    const {
-      mealPreparationId,
-      deliveryPersonnelId,
-      status,
-      deliveryTime,
-      deliveryNotes,
-    } = req.body;
+    const delivery = await DeliveryStatus.find({})
+      .populate("deliveryPersonnelId")
+      .populate("mealPreparationId")
+      .populate("patientId")
+      .populate({
+        path: "mealPreparationId",
+        populate: [{ path: "pantryStaffId" }],
+      })
+      .lean();
 
-    // Find the delivery status for the given meal preparation and delivery personnel
-    const deliveryStatus = await DeliveryStatus.findOne({
-      mealPreparationId,
-      deliveryPersonnelId,
-    });
-    if (!deliveryStatus) {
-      return res.status(404).json({ message: "Delivery Status not found" });
+    if (!delivery || delivery.length === 0) {
+      return res.status(404).json({ message: "No delivery info found" });
     }
 
-    // Update the delivery status
-    deliveryStatus.deliveryStatus = status || deliveryStatus.deliveryStatus;
-    deliveryStatus.deliveryTime = deliveryTime || deliveryStatus.deliveryTime;
-    deliveryStatus.deliveryNotes =
-      deliveryNotes || deliveryStatus.deliveryNotes;
-
-    await deliveryStatus.save();
-
-    res
-      .status(200)
-      .json({
-        message: "Meal delivery status updated successfully",
-        deliveryStatus,
-      });
+    res.status(200).json(delivery);
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const deleteDelivery = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  try {
+    if (!req.params.id) {
+      return res.status(400).json({ message: "Invalid request" });
+    }
+    const deliveryPersonnel = await DeliveryStatus.findByIdAndDelete(
+      req.params.id
+    );
+    if (!deliveryPersonnel)
+      return res.status(404).json({ message: "Delivery not found" });
+    return res
+      .status(200)
+      .json({ message: "Delivery deleted successfully" });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
   }
 };
